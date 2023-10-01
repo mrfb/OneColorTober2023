@@ -1,7 +1,7 @@
 // OneColorTober 20231001
 // magnetic weathervanes
 
-int frames = 100;
+int frames = 1000;
 float progress = 0;
 
 void setup(){
@@ -26,13 +26,16 @@ void draw(){
   
   if(frameCount <= frames){
     saveFrame("frames/####.png");
+    if(frameCount == frames){
+      println("done!");
+    }
   }
 }
 
 // draw a little guy and rotate it using noise
 void weathervane(float x, float y){
   // noise is based on a circle centered on x,y
-  float noiseScale = 0.0050;
+  float noiseScale = 0.0625;
   PVector sampleOffset = PVector.fromAngle(TAU * progress);
   float sampleRadius = width * 0.0625;
   sampleOffset.mult(sampleRadius);
@@ -43,8 +46,8 @@ void weathervane(float x, float y){
   PVector samplePoint = new PVector(x + sampleOffset.x, y + sampleOffset.y);
   
   float adjust = noise(samplePoint.x * noiseScale,
-                       samplePoint.y * noiseScale) * 2 - 1;
-  adjust *= TAU;
+                       samplePoint.y * noiseScale) * 4 - 2;
+  adjust *= TAU * (1 - dist(x, y, width/2, height/2)/dist(width/2 - 5, height/4 - 5, width/2, height/2));
   
   circle(0, 0, 6);      // center hinge
   rotate(adjust);
