@@ -19,10 +19,11 @@ void draw(){
   // recalculate each frame for accuracy
   progress = float(frameCount)/float(frames);
   
-  // 9x9
-  for(float y = height * .25; y <= height * 0.75; y += height * 0.01){
-    for(float x = width * .25; x <= width * 0.75; x += width * 0.01){
-      seabuoy(x, y);
+  // variable grid that fills the interior
+  float gridStep = height * 0.01; // assume square composition
+  for(float y = height * .25; y <= height * 0.75; y += gridStep){
+    for(float x = width * .25; x <= width * 0.75; x += gridStep){
+      wavyGrass(x, y);
     }
   }
   
@@ -35,7 +36,7 @@ void draw(){
 }
 
 // draw a little guy and rotate it using noise
-void seabuoy(float x, float y){
+void wavyGrass(float x, float y){
   // noise is based on a circle centered on x,y
   float noiseScale = 1.0/256;
   PVector sampleOffset = PVector.fromAngle(TAU * progress);
@@ -55,10 +56,13 @@ void seabuoy(float x, float y){
   stroke(c);
   fill(c);
   
-  translate(adjust * 100.0, altAdjust * 100);
+  // warp the grid a little and add a secondary motion
+  translate(adjust * width / 8, altAdjust * width / 8);
+  
   circle(0, -1, 0); // round the base a bit
   
-  rotate(adjust * TAU + TAU/1.9);
+  float manualOffset = TAU/1.9; // looks best to me for this seed
+  rotate(adjust * TAU + manualOffset);
   
   strokeWeight(2);
   line(0, 0, 0, drawRadius);
