@@ -49,9 +49,13 @@ void seabuoy(float x, float y){
   float adjust = noise((x + sampleOffset.x + 100) * noiseScale,
                        (y + sampleOffset.y + 100) * noiseScale) * 2 - 1;
   
+  float altAdjust = noise((y + sampleOffset.y + 100) * noiseScale,
+                       (x + sampleOffset.x + 100) * noiseScale) * 2 - 1;
+  
   stroke(c);
   fill(c);
   
+  translate(adjust * 100.0, altAdjust * 100);
   circle(0, -1, 0); // round the base a bit
   
   rotate(adjust * TAU + TAU/1.9);
