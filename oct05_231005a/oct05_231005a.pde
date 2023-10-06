@@ -3,12 +3,12 @@
 
 // this one's a little more disorderly than usual, sorry.
 
-color c = #5F5F1F;
+color c = #504704;
 
 float progress;
 int frameEnd = 512;
 
-int numFlyers = 32;
+int numFlyers = 5;
 PVector[] anchors;
 
 void setup() {
@@ -31,6 +31,32 @@ void draw() {
   
   progress = frameCount / float(frameEnd);
   
+  translate(width * .75, height * .75);
+  //rotate(progress*TAU);
+  for(int i = 0; i < 256; i += 4){
+    line(-300,  i, 300, i);
+    line(-300, -i, 300, -i);
+  }
+  resetMatrix();
+  
+  fill(255);
+  stroke(255);
+  strokeWeight(1000);
+  circle(width*.75, height*.75, width*.5);
+  stroke(c);
+  strokeWeight(1);
+  noFill();
+  circle(width*.75, height*.75, width*.5);
+  fill(255);
+  noStroke();
+  // matte
+  //rect(width*0, height*0, width, height*.25);
+  //rect(width*0, height*0, width*.25, height);
+  //rect(width*0, height*.75, width, height*.25);
+  //rect(width*.75, height*0, width*.25, height);
+  
+  noFill();
+  stroke(c);
   rect(width*.25, height*.25, width*.5, height*.5);
   
   for(int i = 0; i < anchors.length; i++){
@@ -38,18 +64,18 @@ void draw() {
   }
   
   
-  //int gridStep = 8;
-  //for(int y = 0; y < 50; y += gridStep){
-  //  for(int x = 0; x < 50; x += gridStep){
-  //    flyer(x + 500, y + 500);
+  //int gridStep = 32;
+  //for(int y = int(height * 0.25); y < int(height * 0.75); y += gridStep){
+  //  for(int x = int(width * 0.25); x < int(width * 0.75); x += gridStep){
+  //    flyer(x, y);
   //  }
   //}
   
   
   
-  if(frameCount <= frameEnd){
-    saveFrame("frames/####.png");
-  }
+  //if(frameCount <= frameEnd){
+  //  saveFrame("frames/####.png");
+  //}
   
 }
 
@@ -59,7 +85,9 @@ void flyer(float x, float y){
   float noiseScale = 1.0/64;
   PVector sampleOffset;
   float sampleRadius = width / 128;
-  float drawRadius = 256;
+  //float drawRadius = 256;
+  
+  
   
   // calculate the positions of each of the segments
   PVector[] positions = new PVector[10];
@@ -71,19 +99,24 @@ void flyer(float x, float y){
     float altAdjust = noise((y + sampleOffset.y + 1024) * noiseScale, (x + sampleOffset.x + 1024) * noiseScale);
     adjust = map(adjust, 0, 1, -1, 1);
     altAdjust = map(altAdjust, 0, 1, -1, 1);
-  
+    int drawRadius = 256;
     positions[i] = new PVector(adjust * drawRadius * 1, altAdjust * drawRadius);
   }
   
   stroke(c);
   strokeWeight(1);
   
-  for(int i = 0; i < positions.length; i++){
-    int wingSpan = 1;
+  for(int i = 0; i < positions.length - 1; i++){
     resetMatrix();
     translate(x, y);
     translate(positions[i].x, positions[i].y);
-    line(-wingSpan * log(i), 0, wingSpan * log(i), 0);
+    //line(-wingSpan * log(i), 0, wingSpan * log(i), 0);
+    
+    
+    // needs to 
+    rotate(PVector.angleBetween(positions[i], positions[i+1]) * TAU);
+    rotate(TAU * progress);
+    arc(0, 0, i * 3, i * 3, TAU*.35, TAU*.65);
   }
   
   
