@@ -30,21 +30,21 @@ void draw() {
   for(int i = 4; i < 317; i += 4){
     // main line set
     float offset = -10;
-    float start = sin(progress*TAU + i/4.0)*152;
+    float start = sin(progress*TAU + i/4.0)*258;
     float end = 8;
     line(start - i + offset, i, start+end+i + offset, i);
     
     // alternate set
     offset = -13;
-    start = sin(progress*TAU/8 + i/2.0)*495;
+    start = sin(progress*TAU + i/6.6)*285;
     end = 8;
     line(start - i + offset, i, start+end+i + offset, i);
     
     // highlights
     stroke(255);
-    offset = 6;
-    start = sin(progress*TAU/8 + i/2.0)*103;
-    end = 1;
+    offset = 5;
+    start = sin(progress*TAU + i/2.0)*84;
+    end = -2;
     line(start - i/4.0 + offset, i, start+end+i/4.0 + offset, i/1.1);
     stroke(c);
   }
