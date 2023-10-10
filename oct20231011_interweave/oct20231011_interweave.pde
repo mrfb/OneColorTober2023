@@ -52,12 +52,16 @@ void setup() {
   canvasBR = new PVector(stringsMask.width, stringsMask.height);
   
   stringsMask.stroke(0);
-  int n = stringsMask.height/2;
+  int n = stringsMask.height/5;
   for (int i = 0; i <= n; i++) {
     stringsMask.line(PVector.lerp(canvasTL, canvasBL, i / float(n)).x,
          PVector.lerp(canvasTL, canvasBL, i / float(n)).y,
          PVector.lerp(canvasTR, canvasBR, i / float(n)).x,
          PVector.lerp(canvasTR, canvasBR, i / float(n)).y);
+    stringsMask.line(PVector.lerp(canvasTL, canvasTR, i / float(n)).x,
+         PVector.lerp(canvasTL, canvasTR, i / float(n)).y,
+         PVector.lerp(canvasBL, canvasBR, i / float(n)).x,
+         PVector.lerp(canvasBL, canvasBR, i / float(n)).y);
   }
   stringsMask.endDraw();
   
@@ -69,7 +73,7 @@ void draw() {
   
   background(255);
   stroke(col);
-  strokeWeight(1);
+  strokeWeight(5);
   noFill();
   
   //lineQuad(topLeft, topRight, botLeft, botRight, 16);
@@ -110,7 +114,7 @@ void draw() {
   for(int i = 0; i < 360; i += 45){
     pushMatrix();
    
-    int radius = 256;
+    int radius = 256 - 32;
     int offset = 90;
     
     PVector A = new PVector(cos(radians(i)), sin(radians(i)));
@@ -144,7 +148,7 @@ void draw() {
     pushMatrix();
     //rotate(radians(i));
     
-    int radius = 256;
+    int radius = 256 - 31;
     int offset = 90;
     
     PVector A = new PVector(cos(radians(i)), sin(radians(i)));
@@ -175,12 +179,12 @@ void draw() {
   
   // this isn't quite working how i want, but...
   strings.mask(stringsMask);
-  //image(strings, 0, 0);
+  image(strings, 0, 0);
   
-  //if (frameCount <= frameEnd) {
-  //  saveFrame("frames/####.png");
-  //  if(frameCount == frameEnd) println("done!");
-  //}
+  if (frameCount <= frameEnd) {
+    saveFrame("frames/####.png");
+    if(frameCount == frameEnd) println("done!");
+  }
 }
 
 // draw lines A and B, and also the n lines interpolated between them
