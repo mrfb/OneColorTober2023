@@ -1,6 +1,8 @@
 // 20231012
 // hold
 
+// this one's a little slapdash, sorry to anyone attempting to actually read through these
+
 color col = #1971FA;
 
 float progress;
@@ -52,7 +54,7 @@ void setup() {
   canvasBR = new PVector(stringsMask.width, stringsMask.height);
   
   stringsMask.stroke(0);
-  int n = stringsMask.height/5;
+  int n = stringsMask.height/2;
   for (int i = 0; i <= n; i++) {
     stringsMask.line(PVector.lerp(canvasTL, canvasBL, i / float(n)).x,
          PVector.lerp(canvasTL, canvasBL, i / float(n)).y,
@@ -64,6 +66,8 @@ void setup() {
          PVector.lerp(canvasBL, canvasBR, i / float(n)).y);
   }
   stringsMask.endDraw();
+ 
+  strokeCap(PROJECT);
   
   
 }
@@ -73,33 +77,36 @@ void draw() {
   
   background(255);
   stroke(col);
-  strokeWeight(5);
+  strokeWeight(8);
   noFill();
   
   //lineQuad(topLeft, topRight, botLeft, botRight, 16);
   //lineQuad(topLeft, botLeft, botRight, topRight, 16);
   
   
+
+  
+  translate(midCenter.x, midCenter.y);
+  
+  float sineWave = sin(progress * TAU * 4 + TAU*.25);
+  float shift = map(sineWave, -1, 1, -1.5, 1.5);
+  //shift = abs(shift);
+  shift = constrain(shift, 0, 1);
+  
   PVector sA, sB, sC, sD;
-  int gridRadius = 128;
+  int gridRadius = int(96 - (1-shift)*(64+16));
   sA = new PVector(-gridRadius, -gridRadius);
   sB = new PVector(gridRadius, -gridRadius);
   sC = new PVector(-gridRadius, gridRadius);
   sD = new PVector(gridRadius, gridRadius);
   
-  translate(midCenter.x, midCenter.y);
-  
-  float sineWave = sin(progress*TAU);
-  float shift = map(sineWave, -1, 1, -1, 2);
-  shift = constrain(shift, 0, 1);
-  
   pushMatrix();
-  rotate(shift * TAU * .125);
-  lineQuad(sA, sB, sC, sD, 4);
+  //rotate(shift * TAU * .125);
+  lineQuad(sA, sB, sC, sD, 8);
   popMatrix();
   pushMatrix();
-  rotate(-shift * TAU * .375);
-  lineQuad(sA, sC, sB, sD, 4);
+  //rotate(-shift * TAU * .375);
+  lineQuad(sA, sC, sB, sD, 8);
   popMatrix();
   
   
@@ -117,15 +124,15 @@ void draw() {
     int radius = 256 - 32;
     int offset = 90;
     
-    PVector A = new PVector(cos(radians(i)), sin(radians(i)));
+    //PVector A = new PVector(cos(radians(i)), sin(radians(i)));
     PVector B = new PVector(cos(radians(i + offset)), sin(radians(i + offset)));
-    A.mult(radius);
-    B.mult(radius);
-    PVector AB = PVector.lerp(A, B, shift);
+    //A.mult(radius);
+    B.mult(radius * map(shift, 0, 1, 0.5, 1));
+    //PVector AB = PVector.lerp(A, B, shift);
     
-    translate(AB.x, AB.y);
+    translate(B.x, B.y);
     
-    rotate(TAU * 0.875 * shift);
+    rotate(radians(i));
     square(0, 0, 32);
     
     if(shift < 1){
@@ -134,8 +141,8 @@ void draw() {
       noFill();
     }
     
-    line(-9999, 0, 9999, 0);
-    line(0, -9999, 0, 9999);
+    //line(-9999, 0, 9999, 0);
+    //line(0, -9999, 0, 9999);
     
     popMatrix();
   }
@@ -144,6 +151,7 @@ void draw() {
   shift = map(sineWave, -1, 1, -1, 2);
   shift = constrain(shift, 0, 1);
   
+  // circles move constantly
   for(float i = 22.5; i < 360 + 22.5; i += 45){
     pushMatrix();
     //rotate(radians(i));
@@ -151,25 +159,25 @@ void draw() {
     int radius = 256 - 31;
     int offset = 90;
     
-    PVector A = new PVector(cos(radians(i)), sin(radians(i)));
-    PVector B = new PVector(cos(radians(i + offset)), sin(radians(i + offset)));
+    PVector A = new PVector(cos(progress*TAU/2.0 + radians(i)), sin(progress*TAU/2.0 + radians(i)));
+    //PVector B = new PVector(cos(radians(i + offset)), sin(radians(i + offset)));
     A.mult(radius);
-    B.mult(radius);
-    PVector AB = PVector.lerp(A, B, shift);
+    //B.mult(radius);
+    //PVector AB = PVector.lerp(A, B, shift);
     
-    translate(AB.x, AB.y);
+    translate(A.x, A.y);
     
     rotate(-TAU * 0.875 * shift + TAU*.25);
-    square(0, 0, 32);
+    circle(0, 0, 32);
     
     if(shift < 1){
       fill(col);
-      square(0, 0, (1-shift) * 32);
+      circle(0, 0, (1-shift) * 32);
       noFill();
     }
     
-    line(-9999, 0, 9999, 0);
-    line(0, -9999, 0, 9999);
+    //line(-9999, 0, 9999, 0);
+    //line(0, -9999, 0, 9999);
     
     popMatrix();
   }
@@ -181,10 +189,10 @@ void draw() {
   strings.mask(stringsMask);
   image(strings, 0, 0);
   
-  if (frameCount <= frameEnd) {
-    saveFrame("frames/####.png");
-    if(frameCount == frameEnd) println("done!");
-  }
+  //if (frameCount <= frameEnd) {
+  //  saveFrame("frames/####.png");
+  //  if(frameCount == frameEnd) println("done!");
+  //}
 }
 
 // draw lines A and B, and also the n lines interpolated between them
