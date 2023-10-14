@@ -3,6 +3,8 @@
 
 // this one's a little slapdash, sorry to anyone attempting to actually read through these
 
+boolean saveImages = false;
+
 color col = #1971FA;
 
 float progress;
@@ -147,8 +149,8 @@ void draw() {
     popMatrix();
   }
   
-  sineWave = sin(progress*TAU + TAU*0.25);
-  shift = map(sineWave, -1, 1, -1, 2);
+  sineWave = sin(progress*TAU*4 + TAU*.125);
+  shift = map(sineWave, -1, 1, -1.5, 1.5);
   shift = constrain(shift, 0, 1);
   
   // circles move constantly
@@ -189,10 +191,10 @@ void draw() {
   strings.mask(stringsMask);
   image(strings, 0, 0);
   
-  //if (frameCount <= frameEnd) {
-  //  saveFrame("frames/####.png");
-  //  if(frameCount == frameEnd) println("done!");
-  //}
+  if (frameCount <= frameEnd && saveImages) {
+    saveFrame("frames/####.png");
+    if(frameCount == frameEnd) println("done!");
+  }
 }
 
 // draw lines A and B, and also the n lines interpolated between them
